@@ -27,6 +27,10 @@ autotests = false
 edition = "2024"
 rust-version = "1.85"
 
+[lib]
+path = "crates/core/lib.rs"
+name = "ripgrep"
+
 [[bin]]
 bench = false
 path = "crates/core/main.rs"
@@ -69,6 +73,8 @@ serde_derive = "1.0.77"
 walkdir = "2"
 
 [features]
+default = ["cli"]
+cli = []
 pcre2 = ["grep/pcre2"]
 
 [profile.release]

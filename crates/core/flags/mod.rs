@@ -15,19 +15,23 @@ use std::{
     panic::{RefUnwindSafe, UnwindSafe},
 };
 
-pub(crate) use crate::flags::{
+pub use crate::flags::{
     complete::{
         bash::generate as generate_complete_bash,
         fish::generate as generate_complete_fish,
         powershell::generate as generate_complete_powershell,
         zsh::generate as generate_complete_zsh,
     },
+    doc::man::generate as generate_man_page,
+};
+
+#[cfg(feature = "cli")]
+pub(crate) use crate::flags::{
     doc::{
         help::{
             generate_long as generate_help_long,
             generate_short as generate_help_short,
         },
-        man::generate as generate_man_page,
         version::{
             generate_long as generate_version_long,
             generate_pcre2 as generate_version_pcre2,
@@ -40,9 +44,11 @@ pub(crate) use crate::flags::{
 };
 
 mod complete;
+#[cfg(feature = "cli")]
 mod config;
 mod defs;
 mod doc;
+#[cfg(feature = "cli")]
 mod hiargs;
 mod lowargs;
 mod parse;
