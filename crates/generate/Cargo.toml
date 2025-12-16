@@ -1,0 +1,15 @@
+[package]
+name = "ripgrep-generate"
+version = "0.1.0"
+authors = ["Andrew Gallant <jamslam@gmail.com>"]
+description = "Minimal doc/completion generator for ripgrep"
+edition = "2024"
+rust-version = "1.85"
+license = "Unlicense OR MIT"
+
+[[bin]]
+name = "rg-gen"
+path = "src/main.rs"
+
+[dependencies]
+ripgrep = { path = "../..", default-features = false }
