@@ -104,6 +104,12 @@ jobs:
           target: s390x-unknown-linux-gnu
           strip: s390x-linux-gnu-strip
           qemu: qemu-s390x
+        - build: stable-riscv64
+          os: ubuntu-latest
+          rust: stable
+          target: riscv64gc-unknown-linux-gnu
+          strip: riscv64-linux-gnu-strip
+          qemu: qemu-riscv64
         - build: macos
           os: macos-latest
           rust: nightly
@@ -190,7 +196,7 @@ jobs:
       run: strip "$BIN"
 
     - name: Strip release binary (cross)
-      if: env.CARGO == 'cross'
+      if: env.CARGO == 'cross' && matrix.target != 'riscv64gc-unknown-linux-gnu'
       shell: bash
       run: |
         docker run --rm -v \
@@ -198,6 +204,15 @@ jobs:
           "ghcr.io/cross-rs/${{ matrix.target }}:main" \
           "${{ matrix.strip }}" \
           "/$BIN"
+
+    - name: Strip release binary (riscv64 with elfutils)
+      if: matrix.target == 'riscv64gc-unknown-linux-gnu'
+      shell: bash
+      run: |
+        docker run --rm -v \
+          "$PWD/target:/target:Z" \
+          "ghcr.io/cross-rs/${{ matrix.target }}:main" \
+          sh -c "apt-get update -qq && apt-get install -qq -y elfutils >/dev/null 2>&1 && eu-strip /$BIN"
 
     - name: Determine archive name
       shell: bash
